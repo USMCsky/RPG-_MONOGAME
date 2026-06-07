@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 using Microsoft.Xna.Framework;
@@ -17,6 +18,7 @@ namespace rpg
         private bool isMoving = false;
 
         private KeyboardState kStateOld = Keyboard.GetState();
+        public bool dead = false;
 
         // Animation fields
         public SpriteAnimation anim;
@@ -76,21 +78,28 @@ namespace rpg
 
             // Update player position based on direction and speed
 
+            if (dead)
+                isMoving = false;
+
             if (isMoving)
             {
                 switch (direction)
                 {
                     case Dir.Right:
-                        position.X += speed * dt;
+                        if (position.X < 1275)
+                            position.X += speed * dt;
                         break;
                     case Dir.Left:
-                        position.X -= speed * dt;
+                        if (position.X > 225)
+                            position.X -= speed * dt;
                         break;
                     case Dir.Up:
-                        position.Y -= speed * dt;
+                        if (position.Y > 200)
+                            position.Y -= speed * dt;
                         break;
                     case Dir.Down:
-                        position.Y += speed * dt;
+                        if (position.Y < 1250)
+                            position.Y += speed * dt;
                         break;
                 }
             }
