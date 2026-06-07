@@ -16,6 +16,8 @@ namespace rpg
         private Dir direction = Dir.Down;
         private bool isMoving = false;
 
+        private KeyboardState kStateOld = Keyboard.GetState();
+
         // Animation fields
         public SpriteAnimation anim;
         public SpriteAnimation[] animations = new SpriteAnimation[4];
@@ -69,6 +71,8 @@ namespace rpg
                 isMoving = true;
             }
 
+            if(kState.IsKeyDown(Keys.Space))
+                isMoving = false;
 
             // Update player position based on direction and speed
 
@@ -95,10 +99,17 @@ namespace rpg
 
             anim.Position = new Vector2 (position.X - 48, position.Y - 48);
 
-            if (isMoving)
+            if (kState.IsKeyDown(Keys.Space))
+                anim.setFrame(0);
+            else if (isMoving)
                 anim.Update(gameTime);
             else
                 anim.setFrame(1);
+
+            if (kState.IsKeyDown(Keys.Space) && kStateOld.IsKeyUp(Keys.Space))
+                Projectile.projectiles.Add(new Projectile(position, direction));
+
+            kStateOld = kState;
 
         }
     }

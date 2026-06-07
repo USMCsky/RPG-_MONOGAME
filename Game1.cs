@@ -68,6 +68,8 @@ namespace rpg
 
 
             player.anim = player.animations[0];
+
+            Enemy.enemies.Add(new Enemy(new Vector2(100, 100), skull));
             
         }
 
@@ -81,6 +83,17 @@ namespace rpg
             this.camera.Position = player.Position;
             this.camera.Update(gameTime);
 
+            foreach (Projectile proj in Projectile.projectiles)
+            {
+                proj.Update(gameTime);
+            }
+
+            foreach(Enemy e in Enemy.enemies)
+            {
+                e.Update(gameTime, player.Position);
+            }
+
+
             base.Update(gameTime);
         }
 
@@ -91,6 +104,16 @@ namespace rpg
 
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
             
+            foreach(Enemy e in Enemy.enemies)
+            {
+                e.anim.Draw(_spriteBatch);
+            }
+
+            foreach (Projectile proj in Projectile.projectiles)
+            {
+                _spriteBatch.Draw(ball, new Vector2(proj.Position.X-48, proj.Position.Y-48), Color.White);
+            }
+
             player.anim.Draw(_spriteBatch);
 
             _spriteBatch.End();
